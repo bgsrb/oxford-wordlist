@@ -116,10 +116,7 @@
       var STORAGE_KEY = "todos-vuejs-2.0";
       var todoStorage = {
         fetch: function() {
-          var request = new XMLHttpRequest();
-          request.open('GET', 'db/db.json', false);  // `false` makes the request synchronous
-          request.send(null);
-          var todos = Object.assign([], JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"), JSON.parse(request.responseText || "[]"));
+          var todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
           todos.forEach(function(todo, index) {
             todo.id = index;
           });
@@ -270,6 +267,29 @@
 
       // mount
       app.$mount(".todoapp");
+
+      let synced = false;
+      window.onload = function () {  
+        document.onkeydown = function (e) { 
+          if(synced)
+            return false;
+          setTimeout(function(){ 
+            var request = new XMLHttpRequest();
+            request.open('GET', 'db/db.json', false);  // `false` makes the request synchronous
+            request.send(null);
+            var todos = Object.assign([], JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"), JSON.parse(request.responseText || "[]"));
+            todos.forEach(function(todo, index) {
+              todo.id = index;
+            });
+            todoStorage.uid = todos.length;
+            todoStorage.save(todos);
+            synced = true; 
+            alert("synced");
+            location.reload();
+          }, 100);
+          return false;      
+        };  
+    }  
     </script>
   </body>
 </html>
