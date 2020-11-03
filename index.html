@@ -268,11 +268,10 @@
       // mount
       app.$mount(".todoapp");
 
-      let synced = false;
       window.onload = function () {  
         document.onkeydown = function (e) { 
-          if(synced)
-            return false;
+          if (e.keyCode != 116)
+            return true;
           setTimeout(function(){ 
             var request = new XMLHttpRequest();
             request.open('GET', 'db/db.json', false);  // `false` makes the request synchronous
@@ -283,11 +282,10 @@
             });
             todoStorage.uid = todos.length;
             todoStorage.save(todos);
-            synced = true; 
             alert("synced");
             location.reload();
-          }, 100);
-          return false;      
+          }, 10);
+          return false;    
         };  
     }  
     </script>
