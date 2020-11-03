@@ -117,7 +117,7 @@
       var todoStorage = {
         fetch: function() {
           var request = new XMLHttpRequest();
-          request.open('GET', 'https://bgsrb.github.io/oxford/db/db.json', false);  // `false` makes the request synchronous
+          request.open('GET', 'db/db.json', false);  // `false` makes the request synchronous
           request.send(null);
           var todos = Object.assign([], JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"), JSON.parse(request.responseText || "[]"));
           todos.forEach(function(todo, index) {
